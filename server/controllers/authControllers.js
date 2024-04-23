@@ -2,6 +2,7 @@
 
 // Import necessary modules or models
 const AuthUser = require('../models/Authuser');
+const Signup = require('../models/Authuser');
 
 
 const bcrypt = require('bcrypt');
@@ -60,4 +61,33 @@ exports.login = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
+};
+
+// Fetch users
+exports.getUsers = async (req, res) => {
+  try {
+    // Fetch all users from the database
+    const users = await Authuser.find({}, { password: 0 }); // Exclude password field
+
+    // Check if users are found
+    if (!users) {
+      return res.status(404).json({ message: 'No users found' });
+    }
+
+    // Send users as response
+    res.status(200).json({ users });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.getSignups = async (req, res) => {
+    try {
+        const signups = await Signup.find();
+        res.status(200).json(signups);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
 };

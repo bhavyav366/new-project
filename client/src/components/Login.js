@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import '../formStyles.css'; 
 
-const Login = () => {
+const Login = ({ toggleView }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -13,7 +14,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', { // Updated URL
+      const response = await fetch('http://localhost:5000/api/auth/login', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -21,29 +22,45 @@ const Login = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-      console.log(data); // Log response from the server
-      // Handle success or error messages from the server as needed
+      if (response.ok) {
+        // Display success alert
+        alert('Login successful');
+        // Clear form fields
+        setFormData({
+          email: '',
+          password: ''
+        });
+      } else {
+        // Handle login failure
+        alert('Login failed. Please check your credentials and try again.');
+      }
     } catch (error) {
       console.error('Error:', error);
       // Handle error
+      alert('An error occurred while logging in. Please try again later.');
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="input-container">
+      <div className="form-header">
+        <h2>Login</h2>
+      </div>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="input-group">
           <label>Email:</label>
           <input type="email" name="email" value={formData.email} onChange={handleChange} />
         </div>
-        <div>
+        <div className="input-group">
           <label>Password:</label>
           <input type="password" name="password" value={formData.password} onChange={handleChange} />
         </div>
-        <button type="submit">Login</button>
+        <div className="form-footer">
+          <button className="submit-button" type="submit">Login</button>
+        </div>
       </form>
+      <div className="signup-text">Not an Existing User?</div>
+      <button className="switch-to-signup-button" type="button" onClick={toggleView}>Signup</button>
     </div>
   );
 };

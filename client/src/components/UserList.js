@@ -1,10 +1,10 @@
 import React from 'react';
 import '../styles.css';
 
-const UserList = ({ users, editUser, deleteUser }) => {
+const SignupList = ({ signups }) => {
   return (
     <div className="table-wrapper">
-      <h2>User List</h2>
+      <h2>Signup List</h2>
       <div className="table-container">
         <table>
           <thead>
@@ -15,27 +15,17 @@ const UserList = ({ users, editUser, deleteUser }) => {
               <th>Contact</th>
               <th>Address</th>
               <th>Pincode</th>
-              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
-              <tr key={user._id}>
-                <td>{user.firstName}</td>
-                <td>{user.lastName}</td>
-                <td>{user.email}</td>
-                <td>{user.contact}</td>
-                <td>{user.address}</td>
-                <td>{user.pincode}</td>
-                <td>
-                  <button onClick={() => deleteUser(user._id)} className="delete-button">
-                    Delete
-                  </button>
-                  
-                  <button onClick={() => editUser(user)} className="edit-button" style={{ marginLeft: '10px' }}>
-                    Edit
-                  </button>
-                </td>
+            {signups.map(signup => (
+              <tr key={signup._id}>
+                <td>{signup.firstName}</td>
+                <td>{signup.lastName}</td>
+                <td>{signup.email}</td>
+                <td>{signup.contact}</td>
+                <td>{signup.address}</td>
+                <td>{signup.pincode}</td>
               </tr>
             ))}
           </tbody>
@@ -45,4 +35,4 @@ const UserList = ({ users, editUser, deleteUser }) => {
   );
 };
 
-export default UserList;
+export default SignupList;
