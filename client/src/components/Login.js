@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../formStyles.css'; 
 
-const Login = ({ toggleView }) => {
+const Login = ({ toggleView, onLoginSuccess }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -23,9 +23,11 @@ const Login = ({ toggleView }) => {
       });
 
       if (response.ok) {
-        // Display success alert
+        // onLoginSuccess  from App.js
+        onLoginSuccess();
+        // success alert
         alert('Login successful');
-        // Clear form fields
+        // Clear fields
         setFormData({
           email: '',
           password: ''

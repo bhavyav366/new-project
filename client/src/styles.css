@@ -38,6 +38,8 @@
     background-color: #0056b3; 
 }
 
+/* styles.css */
+
 .table-container {
     margin-bottom: 20px;
     text-align: center;
@@ -57,21 +59,25 @@ table {
     margin: 0 auto;
     border-collapse: separate;
     border-spacing: 10px;
+    border: 2px solid black; 
 }
 
 th, td {
     padding: 10px;
+    border-bottom: 1px solid black; 
 }
 
-.delete-button, .edit-button {
+
+.delete-button, .edit-button, .update-button, .cancel-button {
     background-color: green;
     color: white;
     border: none;
     padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
+    margin-right: 5px; /* Add margin between buttons */
 }
 
-.delete-button:hover, .edit-button:hover {
+.delete-button:hover, .edit-button:hover, .update-button:hover, .cancel-button:hover {
     background-color: darkgreen;
 }
