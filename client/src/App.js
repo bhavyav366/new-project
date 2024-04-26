@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import PeopleList from './components/PeopleList';
 import Signup from './components/Signup';
 import Login from './components/Login';
+import AdminLogin from './components/Admin.js'; // Import AdminLogin component
 
 const App = () => {
   const [signups, setSignups] = useState([]);
-  const [view, setView] = useState('login'); // default view 'login'
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     fetchSignups();
@@ -22,55 +23,56 @@ const App = () => {
     }
   };
 
-  //switching between signup and login 
-  const toggleView = () => {
-    setView(view === 'signup' ? 'login' : 'signup');
-  };
-
-  //login
   const handleLoginSuccess = () => {
-    console.log('Login successful');
-    setIsLoggedIn(true); // Set isLoggedIn to true when login is successful
-    setView('peopleList'); // Set view to 'peopleList' to hide the login form and signup button
+    setIsLoggedIn(true);
   };
 
-  //editing a user
-  const handleEdit = async (userId, updatedData) => {
-    try {
-      await axios.put(`http://localhost:5000/api/auth/signup/${userId}`, updatedData);
-      //fetch updated signups data
-      fetchSignups();
-      console.log('User updated successfully');
-    } catch (error) {
-      console.error('Error updating user:', error);
-    }
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    alert('User Logged Out!')
   };
 
-  //deleting a user
   const handleDelete = async (userId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/auth/signup/${userId}`);
-      //update the signups state to reflect the deletion
-      setSignups(signups.filter(user => user._id !== userId));
-      console.log('User deleted successfully');
+      await axios.delete(`http://localhost:5000/api/auth/signups/${userId}`);
+      fetchSignups();
+      alert('User deleted successfully');
     } catch (error) {
       console.error('Error deleting user:', error);
+      alert('An error occurred while deleting user. Please try again later.');
     }
   };
 
-  console.log('isLoggedIn:', isLoggedIn);
-
   return (
-    <div>
-      {view === 'login' && !isLoggedIn && (
-        <Login toggleView={toggleView} onLoginSuccess={handleLoginSuccess} />
-      )}
-      {view === 'signup' && !isLoggedIn && (
-        <Signup toggleView={toggleView} />
-      )}
-      {isLoggedIn && <PeopleList signups={signups} handleEdit={handleEdit} handleDelete={handleDelete} fetchSignups={fetchSignups} />}
-    </div>
+    <Router>
+      <div>
+        {isLoggedIn && (
+          <nav className="navbar">
+            <ul>
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/peopleList">List</Link></li>
+              <li><Link to="/login" onClick={handleLogout}>Logout</Link></li>
+              <li><Link to="/signup">Signup</Link></li>
+            </ul>
+          </nav>
+        )}
+        <Routes>
+          <Route path="/" element={isLoggedIn ? <Home /> : <Login onLoginSuccess={handleLoginSuccess} />} />
+          <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/peopleList" element={isLoggedIn ? <PeopleList signups={signups} fetchSignups={fetchSignups} handleDelete={handleDelete} /> : <Navigate to="/login" />} />
+          <Route path="/admin" element={<AdminLogin onLoginSuccess={handleLoginSuccess} />} /> {/* Define admin route */}
+        </Routes>
+      </div>
+    </Router>
   );
 };
+
+const Home = () => (
+  <div>
+    <h1>Welcome to Home Page</h1>
+    {/* Other content for the home page */}
+  </div>
+);
 
 export default App;

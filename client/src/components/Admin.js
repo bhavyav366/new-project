@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Import Link component
-import '../formStyles.css'; 
+import { Link, useNavigate } from 'react-router-dom'; // Import Link and useNavigate
+import '../formStyles.css';
 
-const Signup = () => {
+const AdminLogin = ({ onLoginSuccess }) => {
+  const navigate = useNavigate(); // Initialize useNavigate hook
+
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: ''
+    email: 'admin@gmail.com', // Set default admin email
+    password: 'admin123' // Set default admin password
   });
 
   const handleChange = (e) => {
@@ -17,7 +17,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/auth/signup', {
+      const response = await fetch('http://localhost:5000/api/auth/admin/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -25,44 +25,35 @@ const Signup = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-      console.log(data);
-      // Check if user is created successfully
       if (response.ok) {
+        // onLoginSuccess from App.js
+        onLoginSuccess();
+        // Navigate to the admin dashboard
+        navigate('/admin/dashboard');
         // Display success alert
-        alert('User created successfully');
+        alert('Admin login successful');
         // Clear form fields
         setFormData({
-          firstName: '',
-          lastName: '',
           email: '',
           password: ''
         });
       } else {
-        // Handle error
-        alert('Failed to create user. Please try again.');
+        // Handle login failure
+        alert('Admin login failed. Please check your credentials and try again.');
       }
     } catch (error) {
       console.error('Error:', error);
       // Handle error
-      alert('An error occurred. Please try again later.');
+      alert('An error occurred while logging in. Please try again later.');
     }
   };
 
   return (
     <div className="input-container">
       <div className="form-header">
-        <h2>Signup</h2>
+        <h2>Admin Login</h2>
       </div>
       <form onSubmit={handleSubmit}>
-        <div className="input-group">
-          <label>First Name:</label>
-          <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} />
-        </div>
-        <div className="input-group">
-          <label>Last Name:</label>
-          <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} />
-        </div>
         <div className="input-group">
           <label>Email:</label>
           <input type="email" name="email" value={formData.email} onChange={handleChange} />
@@ -72,13 +63,13 @@ const Signup = () => {
           <input type="password" name="password" value={formData.password} onChange={handleChange} />
         </div>
         <div className="form-footer">
-          <button className="submit-button" type="submit">Signup</button>
+          <button className="submit-button" type="submit">Login</button>
         </div>
       </form>
-      <div className="signup-text">Already have an account? </div>
-      <Link className="switch-to-login-button" to="/login">Login</Link>
+      <div className="signup-text">Not an Admin?</div>
+      <Link to="/" className="switch-to-signup-button">Go to User Login</Link>
     </div>
   );
 };
 
-export default Signup;
+export default AdminLogin;

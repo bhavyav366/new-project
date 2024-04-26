@@ -1,44 +1,37 @@
-.input-container {
-    text-align: center; 
-    margin-bottom: 20px;
-    border: 2px solid black;
-    padding: 20px;
-    display: table;
-    margin: 10px auto;
-}
-
-.input-container div {
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center; 
-}
-
-.input-container label {
-    width: 100px;
-    margin-right: 5px; 
-    text-align: right;
-}
-
-.input-container input {
-    width: 300px;
-    padding: 5px;
-}
-
-.input-container button.submit-button {
-    padding: 8px 16px;
-    border: none;
-    background-color: #007bff; 
-    color: #fff; 
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.input-container button.submit-button:hover {
-    background-color: #0056b3; 
-}
-
 /* styles.css */
+
+.navbar {
+  background-color: #343a40;
+  padding: 10px;
+   margin-top: 0; 
+  
+  margin-bottom: 10px;
+}
+
+.navbar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar ul li {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.navbar ul li:last-child {
+  margin-right: 0;
+}
+
+.navbar ul li a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.navbar ul li a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
 
 .table-container {
     margin-bottom: 20px;
@@ -59,14 +52,13 @@ table {
     margin: 0 auto;
     border-collapse: separate;
     border-spacing: 10px;
-    border: 2px solid black; 
+    border: 2px solid black;
 }
 
 th, td {
     padding: 10px;
-    border-bottom: 1px solid black; 
+    border-bottom: 1px solid black;
 }
-
 
 .delete-button, .edit-button, .update-button, .cancel-button {
     background-color: green;
@@ -81,3 +73,4 @@ th, td {
 .delete-button:hover, .edit-button:hover, .update-button:hover, .cancel-button:hover {
     background-color: darkgreen;
 }
+

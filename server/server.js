@@ -2,8 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const authRoutes = require('./routes/authRoutes'); // Import authentication routes
-const userRoutes = require('./routes/users'); // Import user routes
+const authRoutes = require('./routes/authRoutes'); 
+const userRoutes = require('./routes/users'); 
+const adminRoutes = require('./routes/authRoutes'); // Import adminRoutes
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -23,10 +24,13 @@ app.get('/', (req, res) => {
 });
 
 // Authentication routes
-app.use('/api/auth', authRoutes); // Use authentication routes
+app.use('/api/auth', authRoutes); 
 
 // User routes
-app.use('/api/users', userRoutes); // Use user routes
+app.use('/api/users', userRoutes);
+
+// Admin routes
+app.use('/api/admin', adminRoutes); 
 
 // Port setup
 app.listen(PORT, () => {

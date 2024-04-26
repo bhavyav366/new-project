@@ -2,34 +2,39 @@
 
 .input-container {
     text-align: center;
+    margin-top: 0;
     margin-bottom: 40px; /* Increased margin-bottom for additional space */
     border: 2px solid black;
     padding: 20px;
     width: 80%; /* Adjust the width as needed */
     margin: 0 auto; /* Center the form horizontally */
+     
 }
 
 .input-container div {
     margin-bottom: 10px;
+    
     display: flex;
     align-items: center;
     justify-content: center;
+
 }
 
 .input-container label {
     width: 100px;
     margin-right: 5px;
     text-align: right;
+
 }
 
 .input-container input {
     width: 300px;
     padding: 5px;
+
 }
 
-.input-container button.submit-button,
-.input-container button.switch-to-login-button,
-.input-container button.switch-to-signup-button {
+/* Styles for all buttons inside .input-container */
+.input-container button {
     padding: 8px 16px;
     border: none;
     background-color: #007bff;
@@ -38,29 +43,40 @@
     transition: background-color 0.3s ease;
 }
 
-.input-container button.submit-button:hover,
-.input-container button.switch-to-login-button:hover,
-.input-container button.switch-to-signup-button:hover {
+.input-container button:hover {
     background-color: #0056b3;
 }
 
-.input-container .signup-text {
+/* Specific styles for the signup button */
+.input-container .submit-button {
     margin-top: 10px;
-    font-size: 14px;
 }
 
-.input-container button.switch-to-signup-button,
-.input-container button.switch-to-login-button {
-    margin-top: 10px;
+.input-container .switch-to-signup-button {
+ padding: 8px 16px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+     text-decoration: none;
+}
+
+.input-container .switch-to-login-button {
     padding: 8px 16px;
     border: none;
     background-color: #007bff;
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    text-decoration: none;
 }
 
-.input-container button.switch-to-signup-button:hover,
-.input-container button.switch-to-login-button:hover {
-    background-color: #0056b3;
+.admin-button{
+margin-top: 10px;
+}
+
+.admin-text{
+
+margin-top: 20px;
 }

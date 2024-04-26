@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import '../formStyles.css'; 
+import { Link, useNavigate } from 'react-router-dom'; // Import Link and useNavigate
+import '../formStyles.css';
 
-const Login = ({ toggleView, onLoginSuccess }) => {
+const Login = ({ onLoginSuccess }) => {
+  const navigate = useNavigate(); // Initialize useNavigate hook
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -14,7 +17,7 @@ const Login = ({ toggleView, onLoginSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', { 
+      const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -23,11 +26,13 @@ const Login = ({ toggleView, onLoginSuccess }) => {
       });
 
       if (response.ok) {
-        // onLoginSuccess  from App.js
+        // onLoginSuccess from App.js
         onLoginSuccess();
-        // success alert
+        // Navigate to the home page
+        navigate('/');
+        // Display success alert
         alert('Login successful');
-        // Clear fields
+        // Clear form fields
         setFormData({
           email: '',
           password: ''
@@ -41,6 +46,10 @@ const Login = ({ toggleView, onLoginSuccess }) => {
       // Handle error
       alert('An error occurred while logging in. Please try again later.');
     }
+  };
+
+  const handleAdminLoginClick = () => {
+    navigate('/admin'); // Navigate to the admin login page
   };
 
   return (
@@ -62,7 +71,12 @@ const Login = ({ toggleView, onLoginSuccess }) => {
         </div>
       </form>
       <div className="signup-text">Not an Existing User?</div>
-      <button className="switch-to-signup-button" type="button" onClick={toggleView}>Signup</button>
+      <Link to="/signup" className="switch-to-signup-button">Signup</Link>
+      <div className="admin-text">Admin Login here</div>
+
+    <div className="admin-button">
+      <button onClick={handleAdminLoginClick} className="admin-login-button">Admin Login</button>
+      </div>
     </div>
   );
 };

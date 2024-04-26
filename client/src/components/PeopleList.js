@@ -1,27 +1,42 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles.css';
 
-const PeopleList = ({ signups, handleEdit, handleDelete, fetchSignups }) => {
+const PeopleList = ({ signups, handleDelete, fetchSignups }) => {
   const [editableUserId, setEditableUserId] = useState(null);
   const [editedFields, setEditedFields] = useState({});
+  const navigate = useNavigate();
 
   const handleEditClick = (userId, fields) => {
     setEditableUserId(userId);
-    setEditedFields({ ...fields });
+    setEditedFields({
+      firstName: fields.firstName,
+      lastName: fields.lastName,
+      email: fields.email
+    });
   };
 
   const handleUpdateClick = async () => {
     try {
-      // update the user data in the backend
-      console.log('Updated fields:', editedFields);
-      // After update, reset editable user ID and edited fields
-      setEditableUserId(null);
-      setEditedFields({});
-      // Fetch updated signups data
-      fetchSignups();
-      console.log('User updated successfully');
+      const response = await fetch(`http://localhost:5000/api/auth/signups/${editableUserId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editedFields),
+      });
+
+      if (response.ok) {
+        fetchSignups();
+        alert('User updated successfully');
+        setEditableUserId(null);
+        setEditedFields({});
+      } else {
+        alert('Failed to update user. Please try again.');
+      }
     } catch (error) {
       console.error('Error updating user:', error);
+      alert('An error occurred. Please try again later.');
     }
   };
 
@@ -39,6 +54,11 @@ const PeopleList = ({ signups, handleEdit, handleDelete, fetchSignups }) => {
 
   const isFieldEdited = (userId, field) => {
     return editedFields.hasOwnProperty(field) && editedFields[field] !== signups.find(user => user._id === userId)[field];
+  };
+
+  const handleLogout = () => {
+    navigate('/login');
+    alert('User Logged Out!')
   };
 
   return (

@@ -1,5 +1,4 @@
 const AuthUser = require('../models/Authuser');
-
 const bcrypt = require('bcrypt');
 
 exports.signup = async (req, res) => {
@@ -11,13 +10,11 @@ exports.signup = async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     const newUser = new AuthUser({
       firstName,
       lastName,
       email,
-      password: hashedPassword
+      password
     });
 
     await newUser.save();
@@ -50,6 +47,22 @@ exports.login = async (req, res) => {
   }
 };
 
+exports.adminLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Check if the provided credentials match the admin credentials
+    if (email === 'admin@gmail.com' && password === 'admin123') {
+      res.status(200).json({ message: 'Admin login successful' });
+    } else {
+      res.status(401).json({ message: 'Invalid admin credentials' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 exports.getSignups = async (req, res) => {
   try {
     const signups = await AuthUser.find();
@@ -63,9 +76,14 @@ exports.getSignups = async (req, res) => {
 exports.editSignup = async (req, res) => {
   try {
     const { id } = req.params;
-    const updatedSignup = req.body;
+    const { firstName, lastName, email } = req.body;
 
-    const updatedUser = await AuthUser.findByIdAndUpdate(id, updatedSignup, { new: true });
+    if ('password' in req.body) {
+      return res.status(400).json({ message: 'Password cannot be updated using this route' });
+    }
+
+    const updatedUser = await AuthUser.findByIdAndUpdate(id, { firstName, lastName, email }, { new: true });
+
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -81,7 +99,8 @@ exports.deleteSignup = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await AuthUser.findByIdAndUpdate(id, { $set: { status: 'deleted' } });
+    // Remove the user from the database
+    await AuthUser.findByIdAndDelete(id);
 
     res.status(200).json({ message: 'Signup deleted successfully' });
   } catch (error) {
