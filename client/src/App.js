@@ -9,6 +9,7 @@ import AdminLogin from './components/Admin.js'; // Import AdminLogin component
 const App = () => {
   const [signups, setSignups] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     fetchSignups();
@@ -23,30 +24,22 @@ const App = () => {
     }
   };
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (admin) => {
     setIsLoggedIn(true);
+    setIsAdmin(admin);
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setIsAdmin(false);
     alert('User Logged Out!')
-  };
-
-  const handleDelete = async (userId) => {
-    try {
-      await axios.delete(`http://localhost:5000/api/auth/signups/${userId}`);
-      fetchSignups();
-      alert('User deleted successfully');
-    } catch (error) {
-      console.error('Error deleting user:', error);
-      alert('An error occurred while deleting user. Please try again later.');
-    }
   };
 
   return (
     <Router>
       <div>
-        {isLoggedIn && (
+        {/* Render Navbar only if user is admin */}
+        {isLoggedIn && isAdmin && (
           <nav className="navbar">
             <ul>
               <li><Link to="/">Home</Link></li>
@@ -56,12 +49,18 @@ const App = () => {
             </ul>
           </nav>
         )}
+        {/* Routes based on user type */}
         <Routes>
-          <Route path="/" element={isLoggedIn ? <Home /> : <Login onLoginSuccess={handleLoginSuccess} />} />
+          {/* Route for regular user */}
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/peopleList" element={isLoggedIn ? <PeopleList signups={signups} fetchSignups={fetchSignups} handleDelete={handleDelete} /> : <Navigate to="/login" />} />
-          <Route path="/admin" element={<AdminLogin onLoginSuccess={handleLoginSuccess} />} /> {/* Define admin route */}
+          {/* Route for admin */}
+          <Route path="/admin" element={<AdminLogin onLoginSuccess={handleLoginSuccess} />} />
+          {/* Route for displaying PeopleList for regular user */}
+          <Route path="/peopleList" element={isLoggedIn ? <PeopleList signups={signups} fetchSignups={fetchSignups} /> : <Navigate to="/login" />} />
+          {/* Route for displaying welcome message after regular user login */}
+          <Route path="/welcome" element={<WelcomeMessage onLogout={handleLogout} />} />
         </Routes>
       </div>
     </Router>
@@ -72,6 +71,18 @@ const Home = () => (
   <div>
     <h1>Welcome to Home Page</h1>
     {/* Other content for the home page */}
+  </div>
+);
+
+const WelcomeMessage = ({ onLogout }) => (
+  <div className="welcome-container">
+    <h1>Welcome to Login Page</h1>
+    {/* Logout button */}
+    <div className="logout-button">
+      <Link className="logg-button" to="/login" onClick={onLogout}>
+        Logout
+      </Link>
+    </div>
   </div>
 );
 

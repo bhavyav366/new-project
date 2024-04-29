@@ -28,8 +28,8 @@ const Login = ({ onLoginSuccess }) => {
       if (response.ok) {
         // onLoginSuccess from App.js
         onLoginSuccess();
-        // Navigate to the home page
-        navigate('/');
+        // Redirect to the welcome page
+        navigate('/welcome');
         // Display success alert
         alert('Login successful');
         // Clear form fields
@@ -46,10 +46,6 @@ const Login = ({ onLoginSuccess }) => {
       // Handle error
       alert('An error occurred while logging in. Please try again later.');
     }
-  };
-
-  const handleAdminLoginClick = () => {
-    navigate('/admin'); // Navigate to the admin login page
   };
 
   return (
@@ -73,9 +69,8 @@ const Login = ({ onLoginSuccess }) => {
       <div className="signup-text">Not an Existing User?</div>
       <Link to="/signup" className="switch-to-signup-button">Signup</Link>
       <div className="admin-text">Admin Login here</div>
-
-    <div className="admin-button">
-      <button onClick={handleAdminLoginClick} className="admin-login-button">Admin Login</button>
+      <div className="admin-button">
+        <button onClick={() => navigate('/admin')} className="admin-login-button">Admin Login</button>
       </div>
     </div>
   );

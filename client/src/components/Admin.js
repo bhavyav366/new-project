@@ -6,8 +6,8 @@ const AdminLogin = ({ onLoginSuccess }) => {
   const navigate = useNavigate(); // Initialize useNavigate hook
 
   const [formData, setFormData] = useState({
-    email: 'admin@gmail.com', // Set default admin email
-    password: 'admin123' // Set default admin password
+    email: '', // Default email is empty
+    password: '' // Default password is empty
   });
 
   const handleChange = (e) => {
@@ -27,15 +27,15 @@ const AdminLogin = ({ onLoginSuccess }) => {
 
       if (response.ok) {
         // onLoginSuccess from App.js
-        onLoginSuccess();
-        // Navigate to the admin dashboard
-        navigate('/admin/dashboard');
+        onLoginSuccess(true); // Pass true to indicate admin login
+        // Redirect to the home page
+        navigate('/'); // Assuming '/' is the home page route
         // Display success alert
         alert('Admin login successful');
         // Clear form fields
         setFormData({
-          email: '',
-          password: ''
+          email: '', // Reset email to empty
+          password: '' // Reset password to empty
         });
       } else {
         // Handle login failure
@@ -56,18 +56,18 @@ const AdminLogin = ({ onLoginSuccess }) => {
       <form onSubmit={handleSubmit}>
         <div className="input-group">
           <label>Email:</label>
-          <input type="email" name="email" value={formData.email} onChange={handleChange} />
+          <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
         </div>
         <div className="input-group">
           <label>Password:</label>
-          <input type="password" name="password" value={formData.password} onChange={handleChange} />
+          <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} />
         </div>
         <div className="form-footer">
           <button className="submit-button" type="submit">Login</button>
         </div>
       </form>
       <div className="signup-text">Not an Admin?</div>
-      <Link to="/" className="switch-to-signup-button">Go to User Login</Link>
+      <Link to="/login" className="switch-to-signup-button">Go to User Login</Link>
     </div>
   );
 };
